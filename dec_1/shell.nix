@@ -5,7 +5,8 @@ pkgs.mkShell {
 		clang-tools
 		gcc
 		nasm
-			
+		gdb
+
 		neovim
 		nodejs
 		vimPlugins.coc-nvim

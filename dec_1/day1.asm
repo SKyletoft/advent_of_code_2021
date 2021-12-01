@@ -24,15 +24,18 @@ main:
 	call solve
 	call exit
 
-solve:	mov eax, input_buffer
+solve:	mov rax, input_buffer
 	mov edx, 0
+	push rdx
 	call read_number
+	pop rdx
 solve_1:
 	mov ecx, ebx
-	mov eax, input_buffer
+	push rdx
 	call read_number
+	pop rdx
 	cmp ecx, ebx
-	jng solve_2
+	jge solve_2
 	add edx, 1
 solve_2:
 	cmp ecx, 0
@@ -52,25 +55,25 @@ read_stdin:
 	syscall
 	ret
 
-; eax contains the buffer pointer
-; eax returns the pointer to the next number
+; rax contains the buffer pointer
+; rax returns the pointer to the next number
 ; ebx returns the read number
 read_number:
 	mov ebx, 0
 read_number_1:
 	mov dl, 0x0A ; '\n'
-	mov dh, [eax]
+	mov dh, [rax]
 	cmp dh, dl
 	je read_number_2
 
 	imul ebx, 10
 	movsx edx, dh
 	add ebx, edx
-	add ebx, 0x30 ; '0'
-	add eax, 1
+	sub ebx, 0x30 ; '0'
+	add rax, 1
 	jmp read_number_1
 read_number_2:
-	add eax, 1
+	add rax, 1
 	ret
 
 ; eax contains an unsigned number to print
