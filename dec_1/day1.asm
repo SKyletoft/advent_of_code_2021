@@ -14,6 +14,7 @@ section .bss
 	input_buffer: resb 20000
 	input_end: equ $-input_buffer
 
+	window_buffer: resb 12
 
 section .text
 
@@ -22,6 +23,7 @@ _start:	call main
 main:	
 	call read_stdin
 	call solve
+	call part2
 	call exit
 
 solve:	mov rax, input_buffer
@@ -44,6 +46,50 @@ solve_2:
 solve_3:
 	mov eax, edx
 	call print_num
+	ret
+
+part2:	mov rax, input_buffer
+	mov edx, 0
+	push rdx
+	call read_number
+	mov [window_buffer], ebx
+	call read_number
+	mov [window_buffer + 4], ebx
+	call read_number
+	mov [window_buffer + 8], ebx
+	pop rdx
+	call sum_window_buffer
+part2_1:	
+	mov ecx, ebx
+	push rdx
+
+	mov edx, [window_buffer + 4]
+	mov [window_buffer], edx
+	
+	mov edx, [window_buffer + 8] 
+	mov [window_buffer + 4], edx
+	
+	call read_number
+	mov [window_buffer + 8], ebx
+	
+	pop rdx
+	cmp ebx, 0
+	je part2_2
+	call sum_window_buffer
+	cmp ecx, ebx
+	jge part2_1
+	add edx, 1
+	jmp part2_1
+part2_2:
+	mov eax, edx
+	call print_num
+	ret
+
+; returns window_buffer's sum to ebx
+sum_window_buffer:
+	mov ebx, [window_buffer]
+	add ebx, [window_buffer + 4]
+	add ebx, [window_buffer + 8]
 	ret
 
 ; reads the entire file from stdin into the input buffer
