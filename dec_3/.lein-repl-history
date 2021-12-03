@@ -1,0 +1,12 @@
+(require 'dec-3.core :reload)
+(-main)
+main
+(main)
+(-main)
+[1 2 3]
+[1 2 3][0]
+[1 2 3]:0
+nth [1 2 3] 1
+nth [1 2 3] 2
+(nth [4 5 6] 0)
+(println "Hi")
