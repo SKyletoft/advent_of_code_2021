@@ -2,7 +2,9 @@
 pkgs.mkShell {
 	# nativeBuildInputs is usually what you want -- tools you need to run
 	nativeBuildInputs = with pkgs; [
-		gnu-cobol
+		gdb
+		gcc
+		clang-tools
 
 		neovim
 		nodejs
@@ -10,7 +12,5 @@ pkgs.mkShell {
 	];
 	shellHook = ''
 		PS1="\e[32;1mnix-shell: \e[34m\w \[\033[00m\]\n↳ "
-		alias java_assertions="java -ea"
-		alias javac="javac -encoding UTF8"
 	'';
 }
