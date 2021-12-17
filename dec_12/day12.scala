@@ -7,8 +7,10 @@ object Day12 {
 	def main(args: Array[String]) = {
 		val input    = parse_input()
 		val result_1 = part_1(input)
+		val result_2 = part_2(input)
 
 		println(result_1)
+		println(result_2)
 	}
 
 	def parse_input(): Node = {
@@ -58,6 +60,45 @@ object Day12 {
 		}
 
 		find_paths(start, Set(start))
+	}
+
+	def part_2(start: Node): Int = {
+		def find_paths(at: Node, visited: Set[Node], have_visited: Boolean): Int = {
+			at.name match {
+				case "end" => 1
+				case _     => {
+					val without_return = at
+						.links
+						.filter(n => !visited.contains(n))
+						.map(n => {
+							val new_visited = if (n.is_big) {
+								visited
+							} else {
+								visited + n
+							}
+							find_paths(n, new_visited, have_visited)
+						})
+						.sum
+					val with_return = if (have_visited) { 0 } else {
+						at
+							.links
+							.filter(n => visited.contains(n) && n.name != "start")
+							.map(n => {
+								val new_visited = if (n.is_big) {
+									visited
+								} else {
+									visited + n
+								}
+								find_paths(n, new_visited, true)
+							})
+							.sum
+					}
+					without_return + with_return
+				}
+			}
+		}
+
+		find_paths(start, Set(start), false)
 	}
 }
 
