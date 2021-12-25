@@ -74,16 +74,13 @@ func solve_1(x: range, y: range): int =
     .mapIt(max_height(it))
     .max()
 
-proc solve_2(x: range, y: range): int =
+func solve_2(x: range, y: range): int =
   let
     dx = toSeq(1..x.max).filterIt(valid_x(it, x))
-    dy = toSeq(-1000..1000).filterIt(valid_y(it, y))
-    candidates = collect:
-      for cx in dx:
-        for cy in dy:
-          if valid_together(cx, cy, x, y):
-            (cx, cy)
-  candidates.len()
+    dy = toSeq(-200..200).filterIt(valid_y(it, y))
+  dx.map(cx => dy.filter(cy => valid_together(cx, cy, x, y))
+                 .len())
+    .foldr(a + b)
 
 var
   input = readLine(stdin)
@@ -96,7 +93,5 @@ let
   res_1 = solve_1(x, y)
   res_2 = solve_2(x, y)
 
-echo x
-echo y
 echo res_1
 echo res_2
