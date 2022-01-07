@@ -4,6 +4,7 @@ pkgs.mkShell {
 	nativeBuildInputs = with pkgs; [
 		ldc
 		gnumake
+		clang-tools
 
 		neovim
 		nodejs
